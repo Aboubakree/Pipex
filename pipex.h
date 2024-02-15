@@ -6,7 +6,7 @@
 /*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 04:41:17 by akrid             #+#    #+#             */
-/*   Updated: 2024/02/11 12:08:59 by akrid            ###   ########.fr       */
+/*   Updated: 2024/02/14 09:11:57 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ char		*get_cmd_path(char *cmd, char **envp);
 int			args_len(char **str);
 void		cmds_parse(char **argv, t_pipex *pipex, char **envp);
 void		check_args(int argc, char **argv, t_pipex *pipex);
-void		execute1(t_pipex *pipex);
-void		execute2(t_pipex *pipex);
-void		cmds_execute(t_pipex *pipex);
+void		execute1(t_pipex *pipex, char **envp);
+void		execute2(t_pipex *pipex, char **envp);
+void		cmds_execute(t_pipex *pipex, pid_t pid1, pid_t pid2, char **envp);
 
 #endif
