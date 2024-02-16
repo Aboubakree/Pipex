@@ -1,0 +1,19 @@
+------ With PATH -------
+./pipex in "" "" out
+./pipex in env env out
+./pipex in dfg sfg out
+./pipex in ls fgd out
+./pipex in dfg ls out
+./pipex in out
+./pipex in "//ls" "//cat" out
+./pipex /dev/random cat "head -5" out
+./pipex /dev/stdin cat ls out
+./pipex /dev/stdin cat cat out
+./pipex no_exist_file ls "cat -e" out
+
+-------- Without PATH -------
+
+./pipex in "" "" out
+./pipex in env env out
+./pipex in dfg sfg out
+./pipex in /bin/ls "/bin/cat -e"  out

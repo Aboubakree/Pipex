@@ -6,7 +6,7 @@
 /*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:15:22 by akrid             #+#    #+#             */
-/*   Updated: 2024/02/12 14:10:19 by akrid            ###   ########.fr       */
+/*   Updated: 2024/02/15 15:25:52 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ char	**ft_split_v2(char *str, char *charset)
 	int		i;
 
 	i = 0;
-    if(str == NULL)
-        return (NULL);
-	strings = (char **)malloc(sizeof(char *)
-			* (count_strings(str, charset) + 1));
+	if (str == NULL)
+		return (NULL);
+	strings = (char **)malloc(sizeof(char *) * (count_strings(str, charset)
+				+ 1));
 	while (*str != '\0')
 	{
 		while (*str != '\0' && check_separator(*str, charset))

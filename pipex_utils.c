@@ -5,39 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/11 10:31:42 by akrid             #+#    #+#             */
-/*   Updated: 2024/02/15 12:37:35 by akrid            ###   ########.fr       */
+/*   Created: 2024/02/16 09:52:40 by akrid             #+#    #+#             */
+/*   Updated: 2024/02/16 09:52:58 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_cmd(char **cmd)
+void	parse_cmds(t_pipex *pipex)
 {
 	int	i;
 
 	i = 0;
-	while (cmd[i])
-		free(cmd[i++]);
-	free(cmd);
+	if (ft_strchr(pipex->cmd1[0], '/') != NULL)
+	{
+		if (access(pipex->cmd1[0], X_OK) != 0)
+		{
+			ft_printf("zsh : %s : %s\n", strerror(errno), pipex->cmd1[0]);
+			i++;
+		}
+	}
+	if (ft_strchr(pipex->cmd2[0], '/') != NULL)
+	{
+		if (access(pipex->cmd2[0], X_OK) != 0)
+		{
+			ft_printf("zsh : %s : %s\n", strerror(errno), pipex->cmd2[0]);
+			i++;
+		}
+	}
+	if (i)
+	{
+		cmds_clear(pipex);
+		exit(127);
+	}
 }
 
 void	cmds_parse(char **argv, t_pipex *pipex, char **envp)
 {
 	pipex->cmd1 = ft_split_v2(argv[2], " \t\n");
 	pipex->cmd2 = ft_split_v2(argv[3], " \t\n");
-	if (pipex->cmd1[0] == NULL )
+	if (pipex->cmd1[0] == NULL)
 	{
 		free_cmd(pipex->cmd1);
 		pipex->cmd1 = ft_split_v2("more", " \t\n");
 	}
-	if (pipex->cmd2[0] == NULL )
+	if (pipex->cmd2[0] == NULL)
 	{
 		free_cmd(pipex->cmd2);
 		pipex->cmd2 = ft_split_v2("cat", " \t\n");
 	}
 	pipex->path1 = get_cmd_path(pipex->cmd1[0], envp);
 	pipex->path2 = get_cmd_path(pipex->cmd2[0], envp);
+	parse_cmds(pipex);
 }
 
 void	check_args(int argc, char **argv, t_pipex *pipex)
@@ -59,7 +78,7 @@ void	check_args(int argc, char **argv, t_pipex *pipex)
 	pipex->fd_output = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->fd_output == -1)
 	{
-		ft_printf("Error: %s\n", strerror(errno));
+		ft_printf("zsh: %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	if (pipe(pipex->pipe_fd) < 0)
@@ -89,8 +108,9 @@ void	cmds_execute(t_pipex *pipex, pid_t pid1, pid_t pid2, char **envp)
 	}
 	if (pid2 == 0)
 		execute2(pipex, envp);
-	if (ft_strncmp(pipex->cmd1[0], "sleep", 5) == 0 || ft_strncmp(pipex->cmd2[0], "sleep", 5) == 0 ||
-		pipex->fd_input == STDIN_FILENO)
+	if (ft_strncmp(pipex->cmd1[0], "sleep", 5) == 0
+		|| ft_strncmp(pipex->cmd2[0], "sleep", 5) == 0
+		|| pipex->fd_input == STDIN_FILENO)
 		wait(NULL);
 	wait(NULL);
 }

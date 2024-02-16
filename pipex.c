@@ -6,21 +6,21 @@
 /*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 05:30:53 by akrid             #+#    #+#             */
-/*   Updated: 2024/02/15 12:37:30 by akrid            ###   ########.fr       */
+/*   Updated: 2024/02/15 15:24:53 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void lmarda_saffi(t_pipex *pipex, char **envp)
+void	lmarda_saffi(t_pipex *pipex)
 {
-	(void)envp;
+	char	c[1];
+
 	if (ft_strncmp(pipex->cmd1[0], "cat", 3) == 0 && pipex->cmd1[1] == NULL)
 	{
-		char c[1];
-		while(read(0, c, 1))
-			if(c[0] == '\n')
-				break;
+		while (read(0, c, 1))
+			if (c[0] == '\n')
+				break ;
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -28,11 +28,11 @@ void lmarda_saffi(t_pipex *pipex, char **envp)
 void	execute1(t_pipex *pipex, char **envp)
 {
 	if (pipex->fd_input == STDIN_FILENO)
-		lmarda_saffi(pipex, envp);
+		lmarda_saffi(pipex);
 	close(pipex->pipe_fd[0]);
 	dup2(pipex->pipe_fd[1], 1);
 	dup2(pipex->fd_input, 0);
-	if(execve(pipex->path1, pipex->cmd1, envp) == -1)
+	if (execve(pipex->path1, pipex->cmd1, envp) == -1)
 	{
 		ft_printf("zsh: command not found: \"%s\"\n", pipex->cmd1[0]);
 		cmds_clear(pipex);
@@ -57,7 +57,7 @@ void	execute2(t_pipex *pipex, char **envp)
 
 char	**get_all_paths(char **envp)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (envp[i])
@@ -95,5 +95,3 @@ char	*get_cmd_path(char *cmd, char **envp)
 		free_cmd(all_paths);
 	return (ft_strdup(cmd));
 }
-
-

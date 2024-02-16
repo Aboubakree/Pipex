@@ -6,11 +6,21 @@
 /*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 04:42:08 by akrid             #+#    #+#             */
-/*   Updated: 2024/02/15 12:37:09 by akrid            ###   ########.fr       */
+/*   Updated: 2024/02/16 09:49:25 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	free_cmd(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+		free(cmd[i++]);
+	free(cmd);
+}
 
 void	cmds_clear(t_pipex *pipex)
 {
